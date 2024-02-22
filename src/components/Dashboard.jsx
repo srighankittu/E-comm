@@ -1,8 +1,10 @@
 import { useState } from "react";
 import Header from "./Header";
-
+import { useDispatch } from "react-redux";
+import { addItem, removeItem } from "../utils/Redux/cartSlice";
 function Dashboard() {
   const [products, setProducts] = useState([]);
+  const dispatch = useDispatch();
   useState(() => {
     fetchData();
   }, []);
@@ -11,6 +13,14 @@ function Dashboard() {
     const jsonData = await data.json();
     console.log(jsonData.products);
     setProducts(jsonData.products);
+  }
+
+  function onDecrement(item) {
+    dispatch(removeItem(item));
+  }
+
+  function onIncrement(item) {
+    dispatch(addItem(item));
   }
   return (
     <div>
@@ -41,7 +51,32 @@ function Dashboard() {
                   borderRadius: "4px",
                 }}
               />
-              <h3>{item.title}</h3>
+              <h3 className="flex justify-between">
+                {item.title}{" "}
+                <div>
+                  <div className="flex items-center justify-center">
+                    <button
+                      onClick={() => onDecrement(item)}
+                      className="px-4 py-2 bg-gray-200 text-gray-800 font-semibold  hover:bg-gray-300"
+                    >
+                      -
+                    </button>
+
+                    {/* Add Button (This could be visually represented but not clickable if you prefer) */}
+                    <div className=" py-2 bg-gray-200 text-gray-800 font-semibold ">
+                      Add
+                    </div>
+
+                    {/* Increment Button */}
+                    <button
+                      onClick={() => onIncrement(item)}
+                      className="px-4 py-2 bg-gray-200 text-gray-800 font-semibold  hover:bg-gray-300"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+              </h3>
               <p style={{ margin: "4px 0", color: "#555" }}>
                 <strong>Brand:</strong> {item.brand}
               </p>
@@ -72,7 +107,7 @@ function Dashboard() {
                 <strong>Rating:</strong> {item.rating} / 5
               </p>
               <p style={{ margin: "4px 0", color: "#555" }}>
-                <strong>Stock:</strong> {item.availableStock} available
+                <strong>Stock:</strong> {item.stock} available available
               </p>
             </div>
           );

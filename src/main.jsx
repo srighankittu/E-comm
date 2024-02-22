@@ -5,6 +5,9 @@ import "./index.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Dashboard from "./components/Dashboard.jsx";
 import Login from "./components/Login.jsx";
+import { Provider } from "react-redux";
+import appStore from "./utils/Redux/appStore";
+import Checkout from "./components/Checkout.jsx";
 
 const appRouter = createBrowserRouter([
   {
@@ -19,12 +22,18 @@ const appRouter = createBrowserRouter([
     path: "/dashboard",
     element: <Dashboard />,
   },
+  {
+    path: "/checkout",
+    element: <Checkout />,
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <RouterProvider router={appRouter}>
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
-  </RouterProvider>
+  <Provider store={appStore}>
+    <RouterProvider router={appRouter}>
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>
+    </RouterProvider>
+  </Provider>
 );
